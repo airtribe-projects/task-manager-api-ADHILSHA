@@ -16,11 +16,17 @@ router.get("/", (req, res) => {
 });
 //to post a new task
 router.post("/", (req, res) => {
-  const { title, description, completed } = req.body;
+  const { title, description, completed,id } = req.body;
+  //check if passed id already exists
+  const taskIndex = tasks.findIndex((task) => task.id == id);
+  if (taskIndex!=-1) {
+    return res.status(400).json({ error: "Id already exists" });
+  }
   if (!title || !description || typeof completed !== "boolean") {
     return res.status(400).json({ error: "Invalid Input" });
   }
   const task = {
+    id: id,
     title: title,
     description: description,
     completed: completed,
